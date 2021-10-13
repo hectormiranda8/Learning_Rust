@@ -1,0 +1,40 @@
+Dummy Student Record
+
+This record system stores all the students in an array (see Vec) of students. This array will have an alias named students. 
+
+Students is composed of Student, a struct that contains a few things.
+1. name
+2. His date of birth in a unsigned 32 bit integer
+3. Float that contains his average total grade
+4. A type Courses that contains his courses 
+
+Courses is an alias for an array of Course which contains
+1. Course code, must be 4 letters and 4 numbers
+2. Float that contains average grade
+3. Grades, an alias for an array of unsigned 8 bit integers no greater than 100 
+
+The above should teach your about structs and different value types. 
+
+Now time to learn about traits, or inheritance 2.0 
+
+Make a trait called new, which takes a name and birthday, total grades are 0 and the array is initialized 
+
+Now make a trait called enroll, which adds a new Course to Courses given a course code, this should be checked to get its validity 
+
+Make another trait called drop that removes a class and calculates the new average grade. 
+
+Make another called to string, which serializes the struct using the serde_json crate (see rust crates) 
+
+Finally, the following traits will be implemented im both Student and Course, the difference is that Student will also take course name and call the course's equally named trait 
+
+Add Grade, adds a new grade to a cource and calculates both total grades 
+
+Remove grade, removes a grade and calculates total grades 
+
+<NOTE: if course has no grades it will not be counted towards the final average grade> 
+
+<Requested things are public values and traits, feel free to add more private functions and values> 
+
+Now create another file called main, this file is just an average main funct that will test run your project and print its to_string result. This will be run with cargo run 
+
+Finally create a file named tests, test every single trait individually (see cfg test). This will be run with cargo unit-test
