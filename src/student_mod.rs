@@ -91,7 +91,7 @@ impl drop for Student_struct {
             let mut idx = 0;
             for c in self.courses {
                 if c.get_code() == code {
-                    self.courses = TODO(SPLICE);
+                    self.courses.remove(idx);
                     return true;
                 }
                 idx += 1;
