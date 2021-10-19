@@ -1,5 +1,5 @@
+#[cfg(test)] mod tests;
 mod student_mod;
-mod course_mod;
 
 fn main() {
     println!("Compiled.\n");
@@ -36,5 +36,18 @@ fn main() {
         println!("Student is enrolled in: {}", c.get_code());
     }
 
-    
+    // enroll course again
+    let name = std::string::String::from("ICOM4060");
+    student_mod::Student::enroll(&mut student1, name);
+
+    // add grades
+    let name = std::string::String::from("CIIC4050");
+    let grade = 92.1 as u32;
+    student_mod::Student::add_grade(&mut student1, name.clone(), grade);
+    let grade = 82.0 as u32;
+    student_mod::Student::add_grade(&mut student1, name.clone(), grade);
+
+    let avg = student1.get_grade_avg();
+    println!("Student avg is: {}", avg);
+
 }
