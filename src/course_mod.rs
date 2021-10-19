@@ -16,15 +16,15 @@ impl Course {
     }
 
     pub fn get_code (&self) -> String {
-        return self.code;
+        return self.code.clone();
     }
 
     pub fn get_grade_avg(&self) -> f32 {
         return self.grade_avg;
     }
 
-    pub fn get_grades(&self) -> Grades {
-        return self.grades;
+    pub fn get_grades(&self) -> &Grades {
+        return &self.grades;
     }
 }
 

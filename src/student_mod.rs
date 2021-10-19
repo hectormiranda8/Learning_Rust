@@ -1,7 +1,7 @@
-use course_mod::Course;
-mod course_mod;
+use crate::course_mod;
+// mod course_mod;
 
-type Courses = Vec<Course>;
+type Courses = Vec<course_mod::Course>;
 
 struct Student_struct {
     name: String,
@@ -15,11 +15,11 @@ trait new {
 }
 
 trait enroll {
-    fn enroll(&self, code: String) -> bool;
+    fn enroll(&mut self, code: String) -> bool;
 }
 
 trait drop {
-    fn drop(&self, code: String) -> bool;
+    fn drop(&mut self, code: String) -> bool;
 }
 
 trait to_string {
@@ -31,7 +31,7 @@ impl Student_struct {
         let mut len_courses = self.courses.len() as f32;
         let mut avg: f32 = 0.0;
     
-        for c in self.courses {
+        for c in &self.courses {
             if c.get_grades().len() == 0 {
                 len_courses -= 1.0;
             }
@@ -44,7 +44,7 @@ impl Student_struct {
     }
 
     pub fn get_name(&self) -> String {
-        return self.name;
+        return self.name.clone();
     }
 
     pub fn get_date_of_birth(&self) -> u32 {
@@ -55,8 +55,8 @@ impl Student_struct {
         return self.grade_avg;
     }
 
-    pub fn get_courses(&self) -> Courses {
-        return self.courses;
+    pub fn get_courses(&self) -> &Courses {
+        return &self.courses;
     }
 }
 
@@ -72,9 +72,9 @@ impl new for Student_struct {
 }
 
 impl enroll for Student_struct {
-    fn enroll(&self, code: String) -> bool {
-        if course_mod::valid_Code(code) {
-            let mut newCourse: Course = Course::new(code);
+    fn enroll(&mut self, code: String) -> bool {
+        if course_mod::valid_Code(code.clone()) {
+            let mut newCourse: course_mod::Course = course_mod::Course::new(code.clone());
             self.courses.push(newCourse);
             return true;
         }
@@ -86,10 +86,10 @@ impl enroll for Student_struct {
 }
 
 impl drop for Student_struct {
-    fn drop(&self, code: String) -> bool {
-        if course_mod::valid_Code(code) {
+    fn drop(&mut self, code: String) -> bool {
+        if course_mod::valid_Code(code.clone()) {
             let mut idx = 0;
-            for c in self.courses {
+            for c in &self.courses {
                 if c.get_code() == code {
                     self.courses.remove(idx);
                     return true;
