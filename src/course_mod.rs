@@ -7,6 +7,15 @@ pub struct Course {
 }
 
 impl Course {
+    fn calculate_average(&mut self) {
+        let mut avg: u32 = 0.0 as u32;
+        let length = self.grades.len() as u32;
+        for g in &self.grades {
+            avg += g;
+        }
+        self.grade_avg = (avg / length) as f32;
+    }
+
     pub fn new (code: String) -> Course {
         Course {
             code: code,
@@ -26,9 +35,24 @@ impl Course {
     pub fn get_grades(&self) -> &Grades {
         return &self.grades;
     }
+
+    pub fn add_grade(&mut self, grade: u32) -> bool {
+        self.grades.push(grade);
+        self.calculate_average();
+        return true;
+    }
+
+    pub fn remove_grade(&mut self, grade_idx: u32) -> bool {
+        if grade_idx >= self.grades.len() as u32 {
+            return false;
+        }
+        self.grades.remove(grade_idx as usize);
+        self.calculate_average();
+        return true;
+    }
 }
 
-pub fn valid_Code(code: String) -> bool{
+pub fn valid_code(code: String) -> bool{
     // code must be length 8
     if code.len() != 8 {
         return false;
