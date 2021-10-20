@@ -9,11 +9,17 @@ pub struct Course {
 impl Course {
     fn calculate_average(&mut self) {
         let mut avg: u32 = 0.0 as u32;
-        let length = self.grades.len() as u32;
+        let length = self.grades.len() as i32;
         for g in &self.grades {
             avg += g;
         }
-        self.grade_avg = (avg / length) as f32;
+        if length == 0 {
+            self.grade_avg = 0.0;
+        }
+        else {
+            self.grade_avg = (avg / (length as u32)) as f32;
+        }
+        
     }
 
     pub fn new (code: String) -> Course {

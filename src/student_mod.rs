@@ -21,19 +21,23 @@ pub trait Student {
 impl Student_struct {
 
     fn calculate_average(&mut self) {
-        let mut len_courses = self.courses.len() as f32;
+        let mut len_courses = self.courses.len() as i32;
         let mut avg: f32 = 0.0;
     
         for c in &self.courses {
             if c.get_grades().len() == 0 {
-                len_courses -= 1.0;
+                len_courses -= 1;
             }
             else {
                 avg += c.get_grade_avg();
             }
         }
-    
-        self.grade_avg = avg / len_courses;
+        if len_courses == 0 as i32{
+            self.grade_avg = 0.0;
+        }
+        else {
+            self.grade_avg = avg / (len_courses as f32);
+        }
     }
 
     pub fn get_name(&self) -> String {

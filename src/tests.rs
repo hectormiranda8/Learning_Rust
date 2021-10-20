@@ -1,6 +1,5 @@
 #[path = "student_mod.rs"] mod student_mod;
 #[path = "course_mod.rs"] mod course_mod;
-use super::*;
 use std::any::type_name;
 
 fn type_of<T>(_: T) -> &'static str {
@@ -72,12 +71,68 @@ fn add_grade() {
 
 
 /* STUDENT TESTING */
-//create student
-//get student name
-//get student date of birth
+//create student, get student name, get student date of birth
+#[test]
+fn create_student() {
+    let name = "Hector Miranda".to_string();
+    let bd = 19990217;
+    let student: student_mod::Student_struct = student_mod::Student::new(name.clone(), bd.clone());
+    assert_eq!(name, student.get_name());
+    assert_eq!(bd, student.get_date_of_birth());
+    assert_eq!(type_of(student), "studentdb::tests::student_mod::Student_struct");
+}
+
+//enroll and drop course, add and remove grade, get student courses
 //get student grade avg 
-//get student courses
-//enroll course
-//drop course
-//add grade
-//remove grade
+#[test]
+fn student_functions() {
+    let name = "Hector Miranda".to_string();
+    let bd = 19990217;
+    let mut student: student_mod::Student_struct = student_mod::Student::new(name, bd);
+    
+    student_mod::Student::enroll(&mut student, "ICOM4060".to_string());
+
+    assert_eq!(student.get_courses().len(), 1 as usize);
+    assert_eq!(student.get_courses()[0].get_code(), "ICOM4060".to_string());
+    assert_eq!(student.get_courses()[0].get_grade_avg(), 0.0);
+
+    student_mod::Student::enroll(&mut student, "CIIC4050".to_string());
+
+    assert_eq!(student.get_courses().len(), 2 as usize);
+    assert_eq!(student.get_courses()[1].get_code(), "CIIC4050".to_string());
+    assert_eq!(student.get_courses()[1].get_grade_avg(), 0.0);
+    assert_eq!(student.get_grade_avg(), 0.0);
+
+    let result = student_mod::Student::add_grade(&mut student, "ICOM4060".to_string(), 90 as u32);
+    assert_eq!(result, true);
+    assert_eq!(student.get_courses()[0].get_code(), "ICOM4060".to_string());
+    assert_eq!(student.get_courses()[0].get_grade_avg(), 90 as f32);
+    assert_eq!(student.get_grade_avg(), 90 as f32);
+
+    let result = student_mod::Student::add_grade(&mut student, "ICOM".to_string(), 90 as u32);
+    assert_eq!(result, false);
+    let result = student_mod::Student::add_grade(&mut student, "ICOM4050".to_string(), 90 as u32);
+    assert_eq!(result, false);
+
+    let result = student_mod::Student::add_grade(&mut student, "ICOM4060".to_string(), 100 as u32);
+    assert_eq!(result, true);
+    assert_eq!(student.get_courses()[0].get_code(), "ICOM4060".to_string());
+    assert_eq!(student.get_courses()[0].get_grade_avg(), 95 as f32);
+    assert_eq!(student.get_grade_avg(), 95 as f32);
+
+    let result = student_mod::Student::add_grade(&mut student, "CIIC4050".to_string(), 90 as u32);
+    assert_eq!(result, true);
+    assert_eq!(student.get_courses()[1].get_code(), "CIIC4050".to_string());
+    assert_eq!(student.get_courses()[1].get_grade_avg(), 90 as f32);
+    // assert_eq!(student.get_grade_avg(), (((90+100+90) as f32)/3.0) as f32);
+
+    let result = student_mod::Student::drop(&mut student, "ICOM4060".to_string());
+    assert_eq!(result, true);
+    assert_eq!(student.get_courses().len(), 1 as usize);
+    assert_eq!(student.get_grade_avg(), 90 as f32);
+
+    let result = student_mod::Student::remove_grade(&mut student, "CIIC4050".to_string(), 0 as u32);
+    assert_eq!(result, true);
+    assert_eq!(student.get_grade_avg(), 0 as f32);
+
+}
